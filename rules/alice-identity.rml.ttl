@@ -13,6 +13,11 @@
 @prefix sd:     <http://www.w3.org/ns/sparql-service-description#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
+:sparqlService a sd:Service ;
+  sd:endpoint <http://localhost:3330/sparql> ;
+  sd:supportedLanguage sd:SPARQL11Query ;
+  sd:resultFormat <http://www.w3.org/ns/formats/SPARQL_Results_JSON> .
+
 :givenNameSource a rml:LogicalSource ;
 	rml:source :sparqlService ;
 	rml:referenceFormulation ql:JSONPath ;
