@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>The POD-QUERY System</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+  <link href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" rel="stylesheet" type="text/css" />
+
+  <style>
+    .yasqe .yasqe_buttons {
+      display: none ;
+    }
+    .yasqe .yasqe_tooltip {
+      background: #fff;
+      color: #000;
+    }
+
+    /* The switch - the box around the slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The slider */
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #3e8ed0;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #3e8ed0;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    .queryBlocker {
+        cursor: not-allowed;
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: calc(100% - 10px);
+        background: black;
+        left: 0px;
+        top: 0px;
+        opacity: 0.035;
+        z-index: 10;
+    }
+
+    #additional-settings {
+        width: 90%;
+        margin: auto;
+        height: 0px;
+        overflow: clip;
+    }
+
+    #additional-settings-control {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        margin: 10px auto;
+    }
+
+    .selected {
+        border-bottom-color: #7c4dff;
+        color: #7c4dff;
+    }
+
+  </style>
+
+</head>
+<body>
+<noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
+<script defer src="./bootstrap.js"></script>
+
+<section class="hero is-small is-info" style="background-color: #7c4dff">
+  <div class="hero-body">
+    <p class="title">
+      The POD-QUERY System
+    </p>
+  </div>
+</section>
+
+<div class="tabs">
+  <ul>
+    <li class="tab example_1" onclick="openTab(event,'example_1')"><a>Example 1</a></li>
+    <li class="tab example_2" onclick="openTab(event,'example_2')"><a>Example 2</a></li>
+    <li class="tab custom_query" onclick="openTab(event,'custom_query')"><a>Custom Query</a></li>
+  </ul>
+</div>
+
+<div class="container">
+  <div id="example_1" class="content-tab">
+    <div class="notification is-light">
+      <label class="label">Sources:</label>
+      <textarea class="textarea is-link tabSupport" disabled autocomplete="off">
+http://localhost:3000/alice/health/regional_research_survey
+http://localhost:3000/alice/profile/card</textarea>
+      <label class="label">SPARQL Query:</label>
+      <div id="query1" style="position: relative">
+          <div class="queryBlocker scroll-pass-through"></div>
+      </div>
+      <label class="label">Rewritten SPARQL Query (for demo purposes):</label>
+      <div id="query1_rewritten" style="position: relative">
+        <div class="queryBlocker scroll-pass-through"></div>
+      </div>
+      <div class="control">
+        <button class="button is-info" id="startQuery1">Send</button>
+      </div>
+      <label class="label">Results:</label>
+      <div id="results1"></div>
+    </div>
+  </div>
+
+    <div id="example_2" class="content-tab">
+        <div class="notification is-light">
+            <label class="label">Sources:</label>
+            <textarea class="textarea is-link tabSupport" disabled autocomplete="off">
+http://localhost:3000/alice/health/regional_research_survey
+http://localhost:3000/alice/profile/card</textarea>
+            <label class="label">SPARQL Query:</label>
+            <div id="query2" style="position: relative">
+                <div class="queryBlocker scroll-pass-through"></div>
+            </div>
+            <label class="label">Rewritten SPARQL Query (for demo purposes):</label>
+            <div id="query2_rewritten" style="position: relative">
+                <div class="queryBlocker scroll-pass-through"></div>
+            </div>
+            <div class="control">
+                <button class="button is-info" id="startQuery2">Send</button>
+            </div>
+            <label class="label">Results:</label>
+            <div id="results2"></div>
+        </div>
+    </div>
+
+  <div id="custom_query" class="content-tab">
+    <div class="notification is-light">
+        <label class="label">SPARQL Query:</label>
+        <div id="query3" style="position: relative"></div>
+        <label class="label">Optional Demo Settings:</label>
+        <div id="additional-settings">
+            <label class="label">Presets:</label>
+            <div>
+                <button class="button is-info" id="ex1">Example 1</button>
+                <button class="button is-info" id="ex2">Example 2</button>
+                <button class="button is-info" id="ex3">foaf to schema</button>
+            </div>
+            <label class="label">Sources:</label>
+            <textarea id="sources" class="textarea is-link tabSupport" autocomplete="off"></textarea>
+            <label class="label">RML Rule Mappings:</label>
+            <textarea id="mappings" class="textarea is-link tabSupport" autocomplete="off"></textarea>
+            <label class="label">Rewritten SPARQL Query:</label>
+            <div id="query3_rewritten" style="position: relative">
+                <div class="queryBlocker scroll-pass-through"></div>
+            </div>
+        </div>
+        <div id="additional-settings-control">
+            <img src="angle-circle-down-icon.svg">
+        </div>
+        <div class="control">
+            <button class="button is-info" id="startQuery3">Send</button>
+        </div>
+        <label class="label">Results:</label>
+        <div id="results3"></div>
+    </div>
+  </div>
+</div>
+<footer class="footer">
+  <div class="content has-text-centered">
+
+  </div>
+</footer>
+</body>
+<script>
+  //tab controlls
+  function openTab(evt, tabName) {
+    var i, x, tablinks;
+    x = document.getElementsByClassName("content-tab");
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tab");
+    for (i = 0; i < x.length; i++) {
+      if(tablinks[i].className.includes(tabName)) {
+        tablinks[i].className += " is-active";
+      }
+      else {
+        tablinks[i].className = tablinks[i].className.replace(" is-active", "");
+      }
+    }
+    document.getElementById(tabName).style.display = "block";
+
+    for (const element of document.getElementsByClassName("tab")) {
+        if (element.className === "tab " + tabName) {
+            element.getElementsByTagName("a")[0].className = "selected";
+        }
+        element.getElementsByTagName("a")[0].className = "";
+    }
+  }
+
+  let additionalSettingsShow = false;
+  document.getElementById("additional-settings-control").onclick = () => {
+      document.getElementById("additional-settings-control").getElementsByClassName("textarea");
+      additionalSettingsShow = !additionalSettingsShow;
+      if (additionalSettingsShow) {
+          document.getElementById("additional-settings").style.height = "fit-content";
+          document.getElementById("additional-settings-control").style.transform = "rotate(180deg)";
+      } else {
+          document.getElementById("additional-settings").style.height = "0px";
+          document.getElementById("additional-settings-control").style.transform = "rotate(0deg)";
+      }
+  }
+
+  //tabkey support (for better code editing)
+  HTMLTextAreaElement.prototype.getCaretPosition = function () { //return the caret position of the textarea
+    return this.selectionStart;
+  };
+  HTMLTextAreaElement.prototype.setCaretPosition = function (position) { //change the caret position of the textarea
+    this.selectionStart = position;
+    this.selectionEnd = position;
+    this.focus();
+  };
+  HTMLTextAreaElement.prototype.hasSelection = function () { //if the textarea has selection then return true
+    if (this.selectionStart == this.selectionEnd) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+  HTMLTextAreaElement.prototype.getSelectedText = function () { //return the selection text
+    return this.value.substring(this.selectionStart, this.selectionEnd);
+  };
+  HTMLTextAreaElement.prototype.setSelection = function (start, end) { //change the selection area of the textarea
+    this.selectionStart = start;
+    this.selectionEnd = end;
+    this.focus();
+  };
+
+  for (const textarea of document.getElementsByClassName('tabSupport')) {
+    textarea.onkeydown = function(event) {
+      //support tab on textarea
+      if (event.keyCode == 9) { //tab was pressed
+        var newCaretPosition;
+        newCaretPosition = textarea.getCaretPosition() + "    ".length;
+        textarea.value = textarea.value.substring(0, textarea.getCaretPosition()) + "    " + textarea.value.substring(textarea.getCaretPosition(), textarea.value.length);
+        textarea.setCaretPosition(newCaretPosition);
+        return false;
+      }
+      if (event.keyCode == 8) { //backspace
+        if (textarea.value.substring(textarea.getCaretPosition() - 4, textarea.getCaretPosition()) == "    ") { //it's a tab space
+          var newCaretPosition;
+          newCaretPosition = textarea.getCaretPosition() - 3;
+          textarea.value = textarea.value.substring(0, textarea.getCaretPosition() - 3) + textarea.value.substring(textarea.getCaretPosition(), textarea.value.length);
+          textarea.setCaretPosition(newCaretPosition);
+        }
+      }
+      if (event.keyCode == 37) { //left arrow
+        var newCaretPosition;
+        if (textarea.value.substring(textarea.getCaretPosition() - 4, textarea.getCaretPosition()) == "    ") { //it's a tab space
+          newCaretPosition = textarea.getCaretPosition() - 3;
+          textarea.setCaretPosition(newCaretPosition);
+        }
+      }
+      if (event.keyCode == 39) { //right arrow
+        var newCaretPosition;
+        if (textarea.value.substring(textarea.getCaretPosition() + 4, textarea.getCaretPosition()) == "    ") { //it's a tab space
+          newCaretPosition = textarea.getCaretPosition() + 3;
+          textarea.setCaretPosition(newCaretPosition);
+        }
+      }
+    }
+  }
+</script>
+</html>

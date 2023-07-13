@@ -1,0 +1,254 @@
+@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix qst:  <https://vito.be/schema/qst#> .
+@prefix ggdm: <https://vito.be/schema/ggdm#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix sur:  <https://w3id.org/survey-ontology#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix :     <http://example.com/ggdmmapping/> .
+@prefix sd:     <http://www.w3.org/ns/sparql-service-description#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+:givenNameSource a rml:LogicalSource ;
+	rml:source :sparqlService ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:iterator "$.results.bindings[*]" ;
+	rml:query
+	"""
+	prefix foaf: <http://xmlns.com/foaf/0.1/>
+
+	SELECT ?person ?givenname
+	WHERE {
+        ?person foaf:givenName ?givenname .
+	}
+	""" .
+
+:givenNameTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :givenNameSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdf:type ;
+        rr:object foaf:Person 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate foaf:givenName ;
+        rr:objectMap [
+            rml:reference "givenname.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
+
+:familyNameSource a rml:LogicalSource ;
+	rml:source :sparqlService ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:iterator "$.results.bindings[*]" ;
+	rml:query
+	"""
+	prefix foaf: <http://xmlns.com/foaf/0.1/>
+
+	SELECT ?person ?familyname
+	WHERE {
+        ?person foaf:familyName ?familyname .
+	}
+	""" .
+
+:familyNameTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :familyNameSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdf:type ;
+        rr:object foaf:Person 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate foaf:familyName ;
+        rr:objectMap [
+            rml:reference "familyname.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
+
+:ageSource a rml:LogicalSource ;
+	rml:source :sparqlService ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:iterator "$.results.bindings[*]" ;
+	rml:query
+	"""
+	prefix foaf: <http://xmlns.com/foaf/0.1/>
+
+	SELECT ?person ?age
+	WHERE {
+        ?person foaf:age ?age .
+	}
+	""" .
+
+:ageTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :ageSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdf:type ;
+        rr:object foaf:Person 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate foaf:age ;
+        rr:objectMap [
+            rml:reference "age.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
+
+:genderSource a rml:LogicalSource ;
+	rml:source :sparqlService ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:iterator "$.results.bindings[*]" ;
+	rml:query
+	"""
+	prefix foaf: <http://xmlns.com/foaf/0.1/>
+
+	SELECT ?person ?gender
+	WHERE {
+        ?person foaf:gender ?gender .
+	}
+	""" .
+
+:genderTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :genderSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdf:type ;
+        rr:object foaf:Person 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate foaf:gender ;
+        rr:objectMap [
+            rml:reference "gender.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
+
+:paramCholesterolSource a rml:LogicalSource ;
+	rml:source :sparqlService ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:iterator "$.results.bindings[*]" ;
+	rml:query
+	"""
+	prefix ggdm: <https://vito.be/schema/ggdm#> 
+
+	SELECT ?person ?hdl ?ratio ?total
+	WHERE {
+        ?person ggdm:parameterCholesterolHDL 1 ;
+    		ggdm:parameterCholesterolRatio 1 ;
+    		ggdm:parameterCholesterolTotal 0 
+	}
+	""" .
+
+:paramCholesterolTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :paramCholesterolSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdf:type ;
+        rr:object foaf:Person 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ggdm:parameterCholesterolHDL ;
+        rr:objectMap [
+            rml:reference "hdl.value" ;
+            rr:termType rr:Literal 
+        ] 
+    ] ;
+	rr:predicateObjectMap [
+        rr:predicate ggdm:parameterCholesterolRatio ;
+        rr:objectMap [
+            rml:reference "ratio.value" ;
+            rr:termType rr:Literal 
+        ] 
+    ] ;
+	rr:predicateObjectMap [
+        rr:predicate ggdm:parameterCholesterolTotal ;
+        rr:objectMap [
+            rml:reference "total.value" ;
+            rr:termType rr:Literal 
+        ] 
+    ] .
+
+:paramLengthSource a rml:LogicalSource ;
+	rml:source :sparqlService ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:iterator "$.results.bindings[*]" ;
+	rml:query
+	"""
+	prefix ggdm: <https://vito.be/schema/ggdm#> 
+
+	SELECT ?person ?length
+	WHERE {
+        ?person ggdm:parameterLength ?length .
+	}
+	""" .
+
+:paramLengthTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :paramLengthSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdf:type ;
+        rr:object foaf:Person 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ggdm:parameterLength ;
+        rr:objectMap [
+            rml:reference "length.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
+
+:paramWeightSource a rml:LogicalSource ;
+	rml:source :sparqlService ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:iterator "$.results.bindings[*]" ;
+	rml:query
+	"""
+	prefix ggdm: <https://vito.be/schema/ggdm#> 
+
+	SELECT ?person ?weight
+	WHERE {
+        ?person ggdm:parameterWeight ?weight .
+	}
+	""" .
+
+:paramWeightTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :paramWeightSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdf:type ;
+        rr:object foaf:Person 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ggdm:parameterWeight ;
+        rr:objectMap [
+            rml:reference "weight.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
