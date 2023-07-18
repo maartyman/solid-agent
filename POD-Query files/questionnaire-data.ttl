@@ -1,0 +1,164 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ggdm: <https://vito.be/schema/ggdm#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sct:  <http://snomed.info/id/> .
+@prefix sur:  <https://w3id.org/survey-ontology#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+<https://server.solid-sandbox.vito.be/alice/profile/card#me> ggdm:parameterCholesterolHDL    1 ;
+        ggdm:parameterCholesterolRatio  1 ;
+        ggdm:parameterCholesterolTotal  0 ;
+        ggdm:parameterLength            157 ;
+        ggdm:parameterWeight            80 .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question1 ;
+  sur:hasAnswer          ggdm:yes
+] .
+
+_:b0    a                       sur:SurveyCompletionTask ;
+        prov:atTime             "2023-07-12T15:06:37.232978+02:00"^^xsd:dateTime ;
+        prov:wasAssociatedWith  <https://server.solid-sandbox.vito.be/alice/profile/card#me> .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question7-2 ;
+  sur:hasAnswer          ggdm:range10-
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question7-3 ;
+  sur:hasAnswer          ggdm:frequencyLessThanMonthly
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question7-4 ;
+  sur:hasAnswer          ggdm:never
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question7-5 ;
+  sur:hasAnswer          ggdm:frequencyLessThanMonthly
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question7-6 ;
+  sur:hasAnswer          ggdm:frequencyWeekly
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question7-7 ;
+  sur:hasAnswer          ggdm:frequencyMonthly
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question7-8 ;
+  sur:hasAnswer          ggdm:frequencyWeekly
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question7-9 ;
+  sur:hasAnswer          ggdm:sinceNotLastYear
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question7-10 ;
+  sur:hasAnswer          ggdm:sinceNotLastYear
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question8-1 ;
+  sur:hasAnswer          ggdm:frequencyDaily1-
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question9-1 ;
+  sur:hasAnswer          ggdm:frequencyWeeklyLessThanOnce
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question10 ;
+  sur:hasAnswer          ggdm:IDK
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question14 ;
+  sur:hasAnswer          ggdm:no
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question15 ;
+  sur:hasAnswer          ggdm:IDK
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question16 ;
+  sur:hasAnswer          ggdm:IDK
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question17 ;
+  sur:hasAnswer          ggdm:no
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question18 ;
+  sur:hasAnswer          ggdm:yes
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question19 ;
+  sur:hasAnswer          ggdm:no
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question21 ;
+  sur:hasAnswer          ggdm:IDK
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question22 ;
+  sur:hasAnswer          ggdm:IDK
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question3 ;
+  sur:hasAnswer          ggdm:no
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question24 ;
+  sur:hasAnswer          ggdm:no
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question5 ;
+  sur:hasAnswer          ggdm:no
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question6 ;
+  sur:hasAnswer          ggdm:yes
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question6-1 ;
+  sur:hasAnswer          ggdm:range31-
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question6-2 ;
+  sur:hasAnswer          ggdm:rangeMinutes0-5
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question7 ;
+  sur:hasAnswer          ggdm:yes
+] .
+
+[ sur:answeredIn         _:b0 ;
+  sur:completesQuestion  ggdm:question7-1 ;
+  sur:hasAnswer          ggdm:frequencyMonthly2-4
+] .

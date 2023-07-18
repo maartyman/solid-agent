@@ -1,7 +1,7 @@
 import Yasqe from "@triply/yasqe";
 import Yasr from "@triply/yasr";
-import {yasqe1_r} from "./example_1";
-
+import {schemaQuery, schemaToFoafMappings} from "../static_data";
+const {query1, query2, mappings} = require("../static_data");
 
 const sources = document.getElementById("sources");
 const rules = document.getElementById("mappings");
@@ -25,13 +25,29 @@ function setPreset(queryString, sourcesString, rulesString) {
     yasqe3.setValue(queryString);
     sources.value = sourcesString;
     rules.value = rulesString;
+    yasqe3.expandEditor();
 }
 
-setPreset("", "", "");
+setPreset(query1,
+    `https://server.solid-sandbox.vito.be/alice/health/regional_research_survey
+https://server.solid-sandbox.vito.be/alice/profile/card
+https://server.solid-sandbox.vito.be/alice/health/hospital-report
+`,
+    mappings);
 
 const urlRegex = new RegExp(/<?(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*))>?/);
 
+let controller = undefined;
+let signal = undefined;
+
 const query = () => {
+    document.getElementById("startQuery3").nextElementSibling.className = "message loader";
+    document.getElementById("startQuery3").nextElementSibling.innerHTML = "";
+    if (signal !== undefined) {
+        controller.abort();
+    }
+    controller = new AbortController();
+    signal = controller.signal;
     let queryExplanation = {
         queryString: yasqe3.getValue().toString(),
         sources: sources.value.replace(" ", "").replace("\t", "").split("\n").filter(
@@ -39,12 +55,22 @@ const query = () => {
         ),
         rules: rules.value
     }
-    fetch(`http://localhost:3001`, {
+    fetch(`https://server-podquery-demo.vito.be`, {
         method: "POST",
-        body: JSON.stringify(queryExplanation)
+        body: JSON.stringify(queryExplanation),
+        signal: signal
     })
-    .then((response) => response.json())
-    .then((json) => {
+    .then((response) => {
+        document.getElementById("startQuery3").nextElementSibling.className = "message";
+        if (response.ok) {
+            document.getElementById("startQuery3").nextElementSibling.innerHTML = "<p>Ok</p>";
+            return response.json()
+        } else {
+            document.getElementById("startQuery3").nextElementSibling.innerHTML = "<p style='color: red'>" + response.statusText + "</p>";
+            console.log(response.status, response.statusText);
+            return {};
+        }
+    }).then((json) => {
         /*
         console.log(json);
         console.log("Received: ");
@@ -75,7 +101,12 @@ const query = () => {
         const response={head:{vars:Array.from(headVars.keys())},results:{bindings:results}};
         yasr.setResponse(response);
         yasqe3_r.setValue(json.query);
-    });
+    })
+    .catch((err) => {
+        document.getElementById("startQuery3").nextElementSibling.className = "message";
+        document.getElementById("startQuery3").nextElementSibling.innerHTML = "<p style='color: red'>" + err + "</p>";
+        console.log(err);
+    })
 };
 
 
@@ -85,13 +116,26 @@ document.getElementById("startQuery3").addEventListener("click", event => {
 });
 
 document.getElementById("ex1").addEventListener('click', () =>
-    setPreset(
-        "SELECT ?s ?p ?o WHERE {?s ?p ?o}",
-        "http://localhost:3000/alice/profile/card\nhttp://localhost:3000/alice/health/regional_research_survey",
-        ""
-    )
+    setPreset(query1,
+        `https://server.solid-sandbox.vito.be/alice/health/regional_research_survey
+https://server.solid-sandbox.vito.be/alice/profile/card
+https://server.solid-sandbox.vito.be/alice/health/hospital-report
+`,
+        mappings)
 );
 
-document.getElementById("ex2").addEventListener('click', () => setPreset("", "", ""));
+document.getElementById("ex2").addEventListener('click', () =>
+    setPreset(query2,
+        `https://server.solid-sandbox.vito.be/alice/health/regional_research_survey
+https://server.solid-sandbox.vito.be/alice/profile/card
+https://server.solid-sandbox.vito.be/alice/health/hospital-report
+`,
+        mappings)
+);
 
-document.getElementById("ex3").addEventListener('click', () => setPreset("", "", ""));
+document.getElementById("ex3").addEventListener('click', () =>
+    setPreset(schemaQuery,
+        `https://server.solid-sandbox.vito.be/alice/profile/card
+`,
+        schemaToFoafMappings)
+);

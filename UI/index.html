@@ -56,11 +56,11 @@
     }
 
     input:checked + .slider {
-      background-color: #3e8ed0;
+      background-color: #7c4dff;
     }
 
     input:focus + .slider {
-      box-shadow: 0 0 1px #3e8ed0;
+      box-shadow: 0 0 1px #7c4dff;
     }
 
     input:checked + .slider:before {
@@ -106,8 +106,35 @@
     }
 
     .selected {
-        border-bottom-color: #7c4dff;
-        color: #7c4dff;
+        border-bottom-color: #7c4dff !important;
+        color: #7c4dff !important;
+    }
+
+    .loader {
+        border: 8px solid #F5F5F5;
+        border-radius: 50%;
+        border-top: 8px solid #7c4dff;
+        width: 40px;
+        height: 40px;
+        animation: spinner 2s cubic-bezier(.68,-0.55,.27,1.55) infinite;
+    }
+
+    @keyframes spinner {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .message {
+        margin: auto 20px;
+    }
+
+    .button.is-info {
+        background-color: #7c4dff;
+    }
+
+    svg {
+        width: inherit;
+        height: inherit;
     }
 
   </style>
@@ -137,9 +164,10 @@
   <div id="example_1" class="content-tab">
     <div class="notification is-light">
       <label class="label">Sources:</label>
-      <textarea class="textarea is-link tabSupport" disabled autocomplete="off">
-http://localhost:3000/alice/health/regional_research_survey
-http://localhost:3000/alice/profile/card</textarea>
+      <textarea class="textarea is-link tabSupport" disabled autocomplete="off">https://server.solid-sandbox.vito.be/alice/health/regional_research_survey
+https://server.solid-sandbox.vito.be/alice/profile/card
+https://server.solid-sandbox.vito.be/alice/health/hospital-report
+      </textarea>
       <label class="label">SPARQL Query:</label>
       <div id="query1" style="position: relative">
           <div class="queryBlocker scroll-pass-through"></div>
@@ -148,8 +176,9 @@ http://localhost:3000/alice/profile/card</textarea>
       <div id="query1_rewritten" style="position: relative">
         <div class="queryBlocker scroll-pass-through"></div>
       </div>
-      <div class="control">
+      <div class="control" style="display: flex">
         <button class="button is-info" id="startQuery1">Send</button>
+          <div class="message"></div>
       </div>
       <label class="label">Results:</label>
       <div id="results1"></div>
@@ -159,9 +188,10 @@ http://localhost:3000/alice/profile/card</textarea>
     <div id="example_2" class="content-tab">
         <div class="notification is-light">
             <label class="label">Sources:</label>
-            <textarea class="textarea is-link tabSupport" disabled autocomplete="off">
-http://localhost:3000/alice/health/regional_research_survey
-http://localhost:3000/alice/profile/card</textarea>
+            <textarea class="textarea is-link tabSupport" disabled autocomplete="off">https://server.solid-sandbox.vito.be/alice/health/regional_research_survey
+https://server.solid-sandbox.vito.be/alice/profile/card
+https://server.solid-sandbox.vito.be/alice/health/hospital-report
+            </textarea>
             <label class="label">SPARQL Query:</label>
             <div id="query2" style="position: relative">
                 <div class="queryBlocker scroll-pass-through"></div>
@@ -170,8 +200,9 @@ http://localhost:3000/alice/profile/card</textarea>
             <div id="query2_rewritten" style="position: relative">
                 <div class="queryBlocker scroll-pass-through"></div>
             </div>
-            <div class="control">
+            <div class="control" style="display: flex">
                 <button class="button is-info" id="startQuery2">Send</button>
+                <div class="message"></div>
             </div>
             <label class="label">Results:</label>
             <div id="results2"></div>
@@ -180,16 +211,16 @@ http://localhost:3000/alice/profile/card</textarea>
 
   <div id="custom_query" class="content-tab">
     <div class="notification is-light">
+        <label class="label">Presets:</label>
+        <div>
+            <button class="button is-info" id="ex1">Example 1</button>
+            <button class="button is-info" id="ex2">Example 2</button>
+            <button class="button is-info" id="ex3">foaf to schema</button>
+        </div>
         <label class="label">SPARQL Query:</label>
         <div id="query3" style="position: relative"></div>
         <label class="label">Optional Demo Settings:</label>
         <div id="additional-settings">
-            <label class="label">Presets:</label>
-            <div>
-                <button class="button is-info" id="ex1">Example 1</button>
-                <button class="button is-info" id="ex2">Example 2</button>
-                <button class="button is-info" id="ex3">foaf to schema</button>
-            </div>
             <label class="label">Sources:</label>
             <textarea id="sources" class="textarea is-link tabSupport" autocomplete="off"></textarea>
             <label class="label">RML Rule Mappings:</label>
@@ -200,10 +231,11 @@ http://localhost:3000/alice/profile/card</textarea>
             </div>
         </div>
         <div id="additional-settings-control">
-            <img src="angle-circle-down-icon.svg">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="122.883px" height="122.882px" viewBox="0 0 122.883 122.882" enable-background="new 0 0 122.883 122.882" xml:space="preserve"><g><path d="M0,61.441c0-16.966,6.877-32.327,17.996-43.445C29.115,6.877,44.475,0,61.441,0c16.967,0,32.327,6.877,43.446,17.996 c11.119,11.119,17.996,26.479,17.996,43.445c0,16.966-6.877,32.326-17.996,43.445c-11.119,11.118-26.479,17.995-43.446,17.995 c-16.966,0-32.326-6.877-43.445-17.995C6.877,93.768,0,78.407,0,61.441L0,61.441z M42.166,51.505 c-1.784-1.735-4.637-1.695-6.373,0.088c-1.735,1.784-1.695,4.637,0.088,6.372l22.521,21.839l3.142-3.23l-3.146,3.244 c1.792,1.737,4.652,1.693,6.391-0.099c0.049-0.052,0.098-0.104,0.145-0.158l22.084-21.596c1.783-1.735,1.822-4.588,0.088-6.372 c-1.736-1.784-4.588-1.823-6.373-0.088L61.531,70.284L42.166,51.505L42.166,51.505z M24.386,24.386 C14.903,33.869,9.038,46.97,9.038,61.441c0,14.471,5.865,27.572,15.349,37.055c9.482,9.483,22.583,15.349,37.055,15.349 s27.573-5.865,37.055-15.349c9.484-9.482,15.35-22.584,15.35-37.055c0-14.472-5.865-27.573-15.35-37.056 C89.014,14.903,75.912,9.038,61.441,9.038S33.869,14.903,24.386,24.386L24.386,24.386z"/></g></svg>
         </div>
-        <div class="control">
+        <div class="control" style="display: flex">
             <button class="button is-info" id="startQuery3">Send</button>
+            <div class="message"></div>
         </div>
         <label class="label">Results:</label>
         <div id="results3"></div>
@@ -219,27 +251,18 @@ http://localhost:3000/alice/profile/card</textarea>
 <script>
   //tab controlls
   function openTab(evt, tabName) {
-    var i, x, tablinks;
+    var i, x;
     x = document.getElementsByClassName("content-tab");
     for (i = 0; i < x.length; i++) {
       x[i].style.display = "none";
     }
-    tablinks = document.getElementsByClassName("tab");
-    for (i = 0; i < x.length; i++) {
-      if(tablinks[i].className.includes(tabName)) {
-        tablinks[i].className += " is-active";
-      }
-      else {
-        tablinks[i].className = tablinks[i].className.replace(" is-active", "");
-      }
-    }
     document.getElementById(tabName).style.display = "block";
 
     for (const element of document.getElementsByClassName("tab")) {
+        element.getElementsByTagName("a")[0].className = "";
         if (element.className === "tab " + tabName) {
             element.getElementsByTagName("a")[0].className = "selected";
         }
-        element.getElementsByTagName("a")[0].className = "";
     }
   }
 

@@ -1,5 +1,6 @@
 import Yasqe from "@triply/yasqe";
 import Yasr from "@triply/yasr";
+import {query2, rewrittenQuery2} from "../static_data";
 
 export const yasqe2 = new Yasqe(
     document.getElementById('query2')
@@ -15,43 +16,31 @@ const yasr = new Yasr(
 
 yasr.setResponse({head:{vars:[""]},results:{bindings:[{"":{type:"literal",value: ""}}]}});
 
-yasqe2.setValue(`PREFIX schema: <http://schema.org/>
-
-SELECT ?s WHERE { ?s a schema:Person }`);
+yasqe2.setValue(query2);
 yasqe2.expandEditor();
 
-yasqe2_r.setValue(`SELECT  ?s
-WHERE { 
-    {
-        {
-            SELECT  ?rvar3
-            WHERE { 
-                ?rvar3  a  <http://xmlns.com/foaf/0.1/Person> 
-            }
-        }
-        BIND(?rvar3 AS ?s)
-    }
-    UNION
-    { 
-        { 
-            SELECT  ?rvar2
-            WHERE { 
-                ?rvar2  a  <http://schema.org/Person>
-            }
-        }
-        BIND(?rvar2 AS ?s)
-    }
-}`);
-yasqe2_r.expandEditor();
+yasqe2_r.setValue(rewrittenQuery2);
+//yasqe2_r.expandEditor();
 
 const urlRegex = new RegExp(/<?(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*))>?/);
 
 const query = () => {
-
-    fetch(`http://localhost:3001/1`, {
+    document.getElementById("startQuery2").nextElementSibling.className = "message loader";
+    document.getElementById("startQuery2").nextElementSibling.innerHTML = "";
+    fetch(`https://server-podquery-demo.vito.be/1`, {
         method: "GET",
     })
-        .then((response) => response.json())
+        .then((response) => {
+            document.getElementById("startQuery2").nextElementSibling.className = "message";
+            if (response.ok) {
+                document.getElementById("startQuery2").nextElementSibling.innerHTML = "<p>Ok</p>";
+                return response.json()
+            } else {
+                document.getElementById("startQuery2").nextElementSibling.innerHTML = "<p style='color: red'>" + response.statusText + "</p>";
+                console.log(response.status, response.statusText);
+                return {};
+            }
+        })
         .then((json) => {
             /*
             console.log(json);
@@ -82,7 +71,12 @@ const query = () => {
             }
             const response={head:{vars:Array.from(headVars.keys())},results:{bindings:results}};
             yasr.setResponse(response);
-        });
+        })
+        .catch((err) => {
+            document.getElementById("startQuery2").nextElementSibling.className = "message";
+            document.getElementById("startQuery2").nextElementSibling.innerHTML = "<p style='color: red'>" + err + "</p>";
+            console.log(err);
+        })
 };
 
 

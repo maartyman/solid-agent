@@ -1,70 +1,61 @@
 @prefix fhir: <http://hl7.org/fhir/> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ggdm: <https://vito.be/schema/ggdm#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix sct: <http://snomed.info/id/> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sct:  <http://snomed.info/id/> .
+@prefix sur:  <https://w3id.org/survey-ontology#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
-# - resource -------------------------------------------------------------------
+<http://hl7.org/fhir/Condition/example-diabetes>
+        a                              fhir:Condition ;
+        fhir:Condition.category        [ fhir:CodeableConcept.coding  [ fhir:Coding.code     [ fhir:value  "encounter-diagnosis" ] ;
+                                                                        fhir:Coding.display  [ fhir:value  "Encounter Diagnosis" ] ;
+                                                                        fhir:Coding.system   [ fhir:value  "http://terminology.hl7.org/CodeSystem/condition-category" ] ;
+                                                                        fhir:index           0
+                                                                      ] ;
+                                         fhir:CodeableConcept.coding  [ a                    sct:439401001 ;
+                                                                        fhir:Coding.code     [ fhir:value  "439401001" ] ;
+                                                                        fhir:Coding.display  [ fhir:value  "Diagnosis" ] ;
+                                                                        fhir:Coding.system   [ fhir:value  "http://snomed.info/sct" ] ;
+                                                                        fhir:index           1
+                                                                      ] ;
+                                         fhir:index                   0
+                                       ] ;
+        fhir:Condition.clinicalStatus  [ fhir:CodeableConcept.coding  [ fhir:Coding.code    [ fhir:value  "active" ] ;
+                                                                        fhir:Coding.system  [ fhir:value  "http://terminology.hl7.org/CodeSystem/condition-clinical" ] ;
+                                                                        fhir:index          0
+                                                                      ]
+                                       ] ;
+        fhir:Condition.code            [ fhir:CodeableConcept.coding  [ a                    sct:39065001 ;
+                                                                        fhir:Coding.code     [ fhir:value  "73211009" ] ;
+                                                                        fhir:Coding.display  [ fhir:value  "Diabetes mellitus" ] ;
+                                                                        fhir:Coding.system   [ fhir:value  "http://snomed.info/sct" ] ;
+                                                                        fhir:index           0
+                                                                      ] ;
+                                         fhir:CodeableConcept.text    [ fhir:value
+                                                           "Diabetes mellitus" ]
+                                       ] ;
+        fhir:Condition.onsetDateTime   [ fhir:value
+                          "2012-05-24"^^xsd:date ] ;
+        fhir:Condition.subject         [ fhir:Reference.reference  [ fhir:value  "Patient/example" ] ;
+                                         fhir:link                 <http://hl7.org/fhir/Patient/example>
+                                       ] ;
+        fhir:Condition.verificationStatus
+                [ fhir:CodeableConcept.coding  [ fhir:Coding.code    [ fhir:value  "confirmed" ] ;
+                                                 fhir:Coding.system  [ fhir:value  "http://terminology.hl7.org/CodeSystem/condition-ver-status" ] ;
+                                                 fhir:index          0
+                                               ]
+                ] ;
+        fhir:Resource.id               [ fhir:value
+                          "example-diabetes" ] ;
+        fhir:nodeRole                  fhir:treeRoot .
 
-<http://hl7.org/fhir/Condition/example-diabetes> a fhir:Condition;
-  fhir:nodeRole fhir:treeRoot;
-  fhir:Resource.id [ fhir:value "example-diabetes"];
+<http://hl7.org/fhir/Patient/example>
+        a       fhir:Patient .
 
-  fhir:Condition.clinicalStatus [
-     fhir:CodeableConcept.coding [
-       fhir:index 0;
-       fhir:Coding.system [ fhir:value "http://terminology.hl7.org/CodeSystem/condition-clinical" ];
-       fhir:Coding.code [ fhir:value "active" ]
-     ]
-  ];
-
-  fhir:Condition.verificationStatus [
-     fhir:CodeableConcept.coding [
-       fhir:index 0;
-       fhir:Coding.system [ fhir:value "http://terminology.hl7.org/CodeSystem/condition-ver-status" ];
-       fhir:Coding.code [ fhir:value "confirmed" ]
-     ]
-  ];
-
-  fhir:Condition.category [
-     fhir:index 0;
-     fhir:CodeableConcept.coding [
-       fhir:index 0;
-       fhir:Coding.system [ fhir:value "http://terminology.hl7.org/CodeSystem/condition-category" ];
-       fhir:Coding.code [ fhir:value "encounter-diagnosis" ];
-       fhir:Coding.display [ fhir:value "Encounter Diagnosis" ]
-     ], [
-       fhir:index 1;
-       a sct:439401001;
-       fhir:Coding.system [ fhir:value "http://snomed.info/sct" ];
-       fhir:Coding.code [ fhir:value "439401001" ];
-       fhir:Coding.display [ fhir:value "Diagnosis" ]
-     ]
-  ];
-  
-  fhir:Condition.code [
-     fhir:CodeableConcept.coding [
-       fhir:index 0;
-       a sct:39065001;
-       fhir:Coding.system [ fhir:value "http://snomed.info/sct" ];
-       fhir:Coding.code [ fhir:value "73211009" ];
-       fhir:Coding.display [ fhir:value "Diabetes mellitus" ]
-     ];
-     fhir:CodeableConcept.text [ fhir:value "Diabetes mellitus" ]
-  ];
-  
-  fhir:Condition.subject [
-     fhir:link <http://hl7.org/fhir/Patient/example>;
-     fhir:Reference.reference [ fhir:value "Patient/example" ]
-  ];
-  fhir:Condition.onsetDateTime [ fhir:value "2012-05-24"^^xsd:date] .
-
-<http://hl7.org/fhir/Patient/example> a fhir:Patient .
-
-# - ontology header ------------------------------------------------------------
-
-<http://hl7.org/fhir/Condition/example.ttl> a owl:Ontology;
-  owl:imports fhir:fhir.ttl;
-  owl:versionIRI <http://build.fhir.org/Condition/example.ttl> .
-
-# -------------------------------------------------------------------------------------
+<http://hl7.org/fhir/Condition/example.ttl>
+        a               owl:Ontology ;
+        owl:imports     fhir:fhir.ttl ;
+        owl:versionIRI  <http://build.fhir.org/Condition/example.ttl> .

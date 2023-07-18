@@ -1,4 +1,35 @@
-SELECT  ?age ?fruits ?exercise
+export const query1 = `prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix ggdm: <https://vito.be/schema/ggdm#> 
+prefix sur:  <https://w3id.org/survey-ontology#> 
+prefix prov: <http://www.w3.org/ns/prov#> 
+
+SELECT ?age ?fruits ?exercise
+WHERE { 
+  ?completedQ2 sur:answeredIn ?_s ;
+               sur:completesQuestion ggdm:question2 ;
+               sur:hasAnswer ggdm:yes .
+  ?_s prov:wasAssociatedWith ?person .
+  OPTIONAL {
+    ?completedQ9_1 sur:completesQuestion ggdm:question9-1 ; 
+                   sur:hasAnswer ?fruits .
+  }
+  OPTIONAL {
+    ?completedQ10 sur:completesQuestion ggdm:question10 ;
+                  sur:hasAnswer ?exercise .
+  }
+  OPTIONAL {
+    ?person foaf:age ?age .
+  }
+}`;
+
+export const query2 = `prefix sur:  <https://w3id.org/survey-ontology#> 
+
+SELECT ( COUNT(DISTINCT ?completedQuestion) AS ?count )
+WHERE { 
+  ?completedQuestion sur:answeredIn ?session .
+}`;
+
+export const rewrittenQuery1 = `SELECT  ?age ?fruits ?exercise
 WHERE
   {   { { { { { { SELECT  ?rvar294514 ?rvar294510 ?rvar294515 ?rvar294513 ?rvar294511 ?rvar294512
                   WHERE
@@ -211,3 +242,431 @@ WHERE
         BIND(?rvar5632711 AS ?age)
       }
   }
+
+`;
+
+export const rewrittenQuery2 = `SELECT  (COUNT(DISTINCT ?completedQuestion) AS ?count)
+WHERE
+  {   { { SELECT  (if(bound(?fhirConditionOnsetDateTimeValue), <https://vito.be/schema/ggdm#yes>, <https://vito.be/schema/ggdm#no>) AS ?rvar33) (if(bound(?fhirConditionOnsetDateTimeValue), ?fhirConditionOnsetDateTimeValue, concat(str(day(now())), "-", str(month(now())), "-", str(year(now())))) AS ?rvar32)
+          WHERE
+            { OPTIONAL
+                { ?c    a                     <http://hl7.org/fhir/Condition> ;
+                        <http://hl7.org/fhir/Condition.code>  _:b0 .
+                  _:b0  <http://hl7.org/fhir/CodeableConcept.coding>  _:b1 .
+                  _:b1  a                     ?fhirConditionCodingClass ;
+                        <http://hl7.org/fhir/Coding.system>  _:b2 .
+                  _:b2  <http://hl7.org/fhir/value>  ?fhirConditionCodingSystemValue .
+                  _:b1  <http://hl7.org/fhir/Coding.code>  _:b3 .
+                  _:b3  <http://hl7.org/fhir/value>  "73211009" .
+                  _:b1  <http://hl7.org/fhir/Coding.display>  _:b4 .
+                  _:b4  <http://hl7.org/fhir/value>  ?fhirConditionCodingDisplayValue .
+                  ?c    <http://hl7.org/fhir/Condition.subject>  _:b5 .
+                  _:b5  <http://hl7.org/fhir/link>  ?fhirConditionSubjectLink .
+                  ?c    <http://hl7.org/fhir/Condition.onsetDateTime>  _:b6 .
+                  _:b6  <http://hl7.org/fhir/value>  ?fhirConditionOnsetDateTimeValue
+                }
+            }
+        }
+        BIND(BNODE(concat("completed_question_2_on_", str(?rvar32))) AS ?completedQuestion)
+        BIND(BNODE(concat("session_on_", str(?rvar32))) AS ?session)
+      }
+    UNION
+      { { SELECT  ?rvar16 ?rvar12 ?rvar17 ?rvar15 ?rvar13 ?rvar14
+          WHERE
+            { ?rvar14  <http://www.w3.org/ns/prov#atTime>  ?rvar15 ;
+                       <http://www.w3.org/ns/prov#wasAssociatedWith>  ?rvar13 .
+              ?rvar12  <https://w3id.org/survey-ontology#answeredIn>  ?rvar14 ;
+                       <https://w3id.org/survey-ontology#hasAnswer>  ?rvar17 ;
+                       <https://w3id.org/survey-ontology#completesQuestion>  ?rvar16
+              FILTER ( ?rvar16 IN (<https://vito.be/schema/ggdm#question1>, <https://vito.be/schema/ggdm#question2>, <https://vito.be/schema/ggdm#question3>, <https://vito.be/schema/ggdm#question4>, <https://vito.be/schema/ggdm#question5>, <https://vito.be/schema/ggdm#question6>, <https://vito.be/schema/ggdm#question6-1>, <https://vito.be/schema/ggdm#question6-2>, <https://vito.be/schema/ggdm#question7>, <https://vito.be/schema/ggdm#question7-1>, <https://vito.be/schema/ggdm#question7-2>, <https://vito.be/schema/ggdm#question7-3>, <https://vito.be/schema/ggdm#question7-4>, <https://vito.be/schema/ggdm#question7-5>, <https://vito.be/schema/ggdm#question7-6>, <https://vito.be/schema/ggdm#question7-7>, <https://vito.be/schema/ggdm#question7-8>, <https://vito.be/schema/ggdm#question7-9>, <https://vito.be/schema/ggdm#question7-10>, <https://vito.be/schema/ggdm#question8-1>, <https://vito.be/schema/ggdm#question9-1>, <https://vito.be/schema/ggdm#question10>, <https://vito.be/schema/ggdm#question11>, <https://vito.be/schema/ggdm#question12>, <https://vito.be/schema/ggdm#question13>, <https://vito.be/schema/ggdm#question14>) )
+            }
+        }
+        BIND(?rvar12 AS ?completedQuestion)
+        BIND(?rvar14 AS ?session)
+      }
+  }`;
+
+export const schemaQuery = `PREFIX schema: <http://schema.org/>
+
+SELECT ?person ?friend
+WHERE { 
+  ?person a schema:Person .
+  ?person schema:knows ?friend .
+}`;
+
+export const schemaToFoafMappings = `@prefix :       <http://example.com/> .
+@prefix ql:     <http://semweb.mmlab.be/ns/ql#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rml:    <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr:     <http://www.w3.org/ns/r2rml#> .
+@prefix schema: <http://schema.org/> .
+@prefix sd:     <http://www.w3.org/ns/sparql-service-description#>.
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+:sparqlService a sd:Service ;
+\tsd:endpoint <http://localhost:3330/sparql> ;
+\tsd:supportedLanguage sd:SPARQL11Query ;
+\tsd:resultFormat <http://www.w3.org/ns/formats/SPARQL_Results_JSON> .
+
+:knowsSource a rml:logicalSource ;
+    rml:source :sparqlService ;
+\trml:referenceFormulation ql:JSONPath ;
+\trml:iterator "$.results.bindings[*]" ;
+    rml:query """
+    prefix foaf: <http://xmlns.com/foaf/0.1/>
+
+    SELECT ?s ?o WHERE { ?s foaf:knows ?o } """ .
+
+
+:knowsMap a rr:TriplesMap ;
+\trml:logicalSource :knowsSource ;
+    rr:subjectMap [
+        rml:reference "s.value" ;
+\t\trr:termType rr:IRI
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate schema:knows ;
+        rr:objectMap [
+            rml:reference "o.value" ;
+\t\t\trr:termType rr:IRI
+        ]
+    ] .
+
+:personSource a rml:logicalSource ;
+\trml:source :sparqlService ;
+\trml:referenceFormulation ql:JSONPath ;
+\trml:iterator "$.results.bindings[*]" ;
+    rml:query """
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+    SELECT ?s WHERE { ?s a foaf:Person } """ .
+
+:personMap a rr:TriplesMap ;
+\trml:logicalSource :personSource ;
+    rr:subjectMap [
+        rml:reference "s.value" ;
+        rr:termType rr:IRI
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdf:type ;
+        rr:object schema:Person
+    ] .
+
+
+`;
+
+export const mappings = `@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix qst:  <https://vito.be/schema/qst#> .
+@prefix ggdm: <https://vito.be/schema/ggdm#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix sur:  <https://w3id.org/survey-ontology#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix :     <https://server.solid-sandbox.vito.be/alice/> .
+@prefix sd:   <http://www.w3.org/ns/sparql-service-description#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+
+#####################
+# Diabetes source
+#####################
+
+:sparqlService a sd:Service ;
+  sd:endpoint <http://localhost:3330/sparql> ;
+  sd:supportedLanguage sd:SPARQL11Query ;
+  sd:resultFormat <http://www.w3.org/ns/formats/SPARQL_Results_JSON> .
+
+:diabetesSource a rml:LogicalSource ;
+  rml:source :sparqlService ;
+  rml:referenceFormulation ql:JSONPath ;
+  rml:iterator "$.results.bindings[*]" ;
+  rml:query 
+"""prefix fhir: <http://hl7.org/fhir/> 
+prefix owl: <http://www.w3.org/2002/07/owl#> 
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+prefix sct: <http://snomed.info/id/> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+prefix ggdm: <https://vito.be/schema/ggdm#> 
+
+SELECT 
+?answer ?date
+WHERE { 
+  {} OPTIONAL 
+  {
+    ?c a fhir:Condition ;
+      fhir:Condition.code [
+        fhir:CodeableConcept.coding [
+          a ?fhirConditionCodingClass ;
+          fhir:Coding.system [ fhir:value ?fhirConditionCodingSystemValue ] ;
+          fhir:Coding.code [ fhir:value "73211009" ] ;
+          fhir:Coding.display [ fhir:value ?fhirConditionCodingDisplayValue ] ;
+        ] ;
+      ] ;
+      fhir:Condition.subject [ fhir:link ?fhirConditionSubjectLink ] ;
+      fhir:Condition.onsetDateTime [ fhir:value ?fhirConditionOnsetDateTimeValue ] . 
+  } .
+  BIND(IF(BOUND(?fhirConditionOnsetDateTimeValue),?fhirConditionOnsetDateTimeValue,concat(str(day(now())),"-",str(month(now())),"-",str(year(now())))) AS ?date)
+  BIND(IF(BOUND(?fhirConditionOnsetDateTimeValue),ggdm:yes,ggdm:no) AS ?answer)
+}""" .
+
+:completedQuestionTriplesMap a rr:TriplesMap ;
+  rml:logicalSource :diabetesSource ;
+  rr:subjectMap [
+    rr:template "completed_question_2_on_{date.value}" ;
+    # rr:class :<class> ; # Is there a class for completed questions? If yes fill in, if no remove line
+    rr:termType rr:BlankNode ] ;
+  rr:predicateObjectMap [
+    rr:predicate sur:answeredIn ;
+    rr:objectMap [
+      rr:template "session_on_{date.value}" ;
+      rr:termType rr:BlankNode ] ] ;
+  rr:predicateObjectMap [
+    rr:predicate sur:hasAnswer ;
+    rr:objectMap [
+      rml:reference "answer.value" ;
+      rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [
+    rr:predicate sur:completesQuestion ;
+    rr:object ggdm:question2 ] .
+
+:sessionTriplesMap a rr:TriplesMap ;
+  rml:logicalSource :diabetesSource ;
+  rr:subjectMap [
+    rr:template "session_on_{date.value}" ;
+    rr:class sur:SurveyCompletionTask ;
+    rr:termType rr:BlankNode ] ;
+  rr:predicateObjectMap [
+    rr:predicate prov:atTime ;
+    rr:objectMap [
+      rml:reference "date.value" ;
+      rr:datatype xsd:date ] ] ;
+  rr:predicateObjectMap [
+    rr:predicate prov:wasAssociatedWith ;
+    rr:object <https://server.solid-sandbox.vito.be/alice/profile/card#me> ] .
+
+:personSource a rml:LogicalSource ;
+\trml:source :sparqlService ;
+\trml:referenceFormulation ql:JSONPath ;
+\trml:iterator "$.results.bindings[*]" ;
+\trml:query
+\t"""
+\tprefix foaf: <http://xmlns.com/foaf/0.1/>
+    prefix ggdm: <https://vito.be/schema/ggdm#> 
+
+\tSELECT ?person ?givenname ?familyname ?age ?hdl ?ratio ?total ?length ?weight
+\tWHERE {
+        ?person foaf:givenName ?givenname ;
+            foaf:familyName ?familyname ;
+            foaf:age ?age ;
+            foaf:gender ?gender ;
+            ggdm:parameterCholesterolHDL ?hdl ;
+    \t\tggdm:parameterCholesterolRatio ?ratio ;
+    \t\tggdm:parameterCholesterolTotal ?total ;
+            ggdm:parameterLength ?length ;
+            ggdm:parameterWeight ?weight .
+\t}
+\t""" .
+
+:givenNameTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :personSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdf:type ;
+        rr:object foaf:Person 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate foaf:givenName ;
+        rr:objectMap [
+            rml:reference "givenname.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
+
+:familyNameTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :personSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate foaf:familyName ;
+        rr:objectMap [
+            rml:reference "familyname.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
+
+:ageTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :personSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate foaf:age ;
+        rr:objectMap [
+            rml:reference "age.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
+
+
+:genderTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :personSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate foaf:gender ;
+        rr:objectMap [
+            rml:reference "gender.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
+
+:paramCholesterolTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :personSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ggdm:parameterCholesterolHDL ;
+        rr:objectMap [
+            rml:reference "hdl.value" ;
+            rr:termType rr:Literal 
+        ] 
+    ] ;
+\trr:predicateObjectMap [
+        rr:predicate ggdm:parameterCholesterolRatio ;
+        rr:objectMap [
+            rml:reference "ratio.value" ;
+            rr:termType rr:Literal 
+        ] 
+    ] ;
+\trr:predicateObjectMap [
+        rr:predicate ggdm:parameterCholesterolTotal ;
+        rr:objectMap [
+            rml:reference "total.value" ;
+            rr:termType rr:Literal 
+        ] 
+    ] .
+
+:paramLengthTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :personSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ggdm:parameterLength ;
+        rr:objectMap [
+            rml:reference "length.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
+
+:paramWeightTriplesMap a rr:TriplesMap ;
+    rml:logicalSource :personSource ;
+    rr:subjectMap [
+        rml:reference "person.value" ;
+        rr:termType rr:IRI 
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ggdm:parameterWeight ;
+        rr:objectMap [
+            rml:reference "weight.value" ;
+            rr:termType rr:Literal 
+        ]
+    ] .
+
+:answerSource a rml:LogicalSource ;
+\trml:source :sparqlService ;
+\trml:referenceFormulation ql:JSONPath ;
+\trml:iterator "$.results.bindings[*]" ;
+\trml:query
+\t"""
+\tprefix ggdm: <https://vito.be/schema/ggdm#> 
+\tprefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+\tprefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+\tprefix owl:  <http://www.w3.org/2002/07/owl#> 
+\tprefix xsd:  <http://www.w3.org/2001/XMLSchema#> 
+\tprefix sur:  <https://w3id.org/survey-ontology#> 
+\tprefix prov: <http://www.w3.org/ns/prov#> 
+\t
+\tSELECT ?question ?completedQuestion ?answer ?date ?person ?session
+\tWHERE {
+\t\t?session prov:atTime ?date ;
+            prov:wasAssociatedWith ?person .
+        ?completedQuestion sur:answeredIn ?session ;
+            sur:hasAnswer ?answer ;
+            sur:completesQuestion ?question .
+\t\tFILTER (?question IN (ggdm:question1, ggdm:question2, ggdm:question3, 
+\t\t                      ggdm:question4, ggdm:question5, ggdm:question6, 
+\t\t\t\t\t\t\t  ggdm:question6-1, ggdm:question6-2,  
+\t\t\t\t\t\t\t  ggdm:question7, ggdm:question7-1, ggdm:question7-2,
+\t\t\t\t\t\t\t  ggdm:question7-3, ggdm:question7-4, ggdm:question7-5,
+\t\t\t\t\t\t\t  ggdm:question7-6, ggdm:question7-7, ggdm:question7-8,
+\t\t\t\t\t\t\t  ggdm:question7-9, ggdm:question7-10, ggdm:question8-1, 
+\t\t\t\t\t\t\t  ggdm:question9-1, ggdm:question10, ggdm:question11, 
+\t\t\t\t\t\t\t  ggdm:question12, ggdm:question13, ggdm:question14))
+\t}
+\t""" .
+\t
+:identityCompletedQuestionTriplesMap a rr:TriplesMap ;
+\trml:logicalSource :answerSource ;
+\trr:subjectMap [
+\t\trml:reference "completedQuestion.value" ;
+\t\trr:termType rr:IRI 
+\t\t] ;
+\trr:predicateObjectMap [
+\t\trr:predicate sur:answeredIn ;
+\t\trr:objectMap [
+\t\t\trml:reference "session.value" ;
+\t\t\trr:termType rr:IRI 
+\t\t\t] 
+\t\t] ;
+\trr:predicateObjectMap [
+\t\trr:predicate sur:hasAnswer ;
+\t\trr:objectMap [
+\t\t\trml:reference "answer.value" ;
+\t\t\trr:termType rr:IRI 
+\t\t\t] 
+\t\t] ;
+\trr:predicateObjectMap [
+\t\trr:predicate sur:completesQuestion ;
+\t\trr:objectMap [
+\t\t\trml:reference "question.value" ;
+\t\t\trr:termType rr:IRI 
+\t\t\t] 
+\t\t] .
+\t\t
+:identitySessionTriplesMap a rr:TriplesMap ;
+\trml:logicalSource :answerSource ;
+\trr:subjectMap [
+\t\trml:reference "session.value" ;
+\t\trr:termType rr:IRI 
+\t\t] ;
+\trr:predicateObjectMap [
+\t\trr:predicate prov:atTime ;
+\t\trr:objectMap [
+\t\t\trml:reference "date.value" ;
+\t\t\trr:datatype xsd:date 
+\t\t\t] 
+\t\t] ;
+\trr:predicateObjectMap [
+\t\trr:predicate prov:wasAssociatedWith ;
+\t\trr:objectMap [
+\t\t\trml:reference "person.value" ;
+\t\t\trr:termType rr:IRI 
+\t\t\t] 
+\t\t] .
+`;

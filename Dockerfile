@@ -32,9 +32,9 @@ ADD solid-agent/rules /rules
 #clone aggregator-server (query rewriting branch)
 RUN mkdir /server
 WORKDIR /server
-#RUN git clone https://github.com/maartyman/solid-aggregator-server.git /server
-#RUN git checkout query-rewriting
-ADD solid-aggregator-server .
+ADD solid-aggregator-server ./solid-aggregator-server
+ADD incremunica ./incremunica
+WORKDIR /server/solid-aggregator-server
 RUN npm install
 RUN npm run build
 

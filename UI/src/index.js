@@ -1,6 +1,7 @@
 const {yasqe1} = require("./tabs/example_1");
 const {yasqe2} = require("./tabs/example_2");
 const {yasqe3} = require("./tabs/custom_query");
+
 function gup( name, url ) {
     if (!url) url = location.href;
     name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
@@ -14,7 +15,6 @@ for(const blocker of document.getElementsByClassName("scroll-pass-through")) {
     let scroller = blocker.parentNode.getElementsByClassName("CodeMirror-scroll")[0];
     blocker.addEventListener("wheel", (event) => {
         event.preventDefault();
-        console.log(scroller, event);
         scroller.scrollBy({
             top: -event.wheelDelta,
             left: 0,

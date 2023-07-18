@@ -1,20 +1,16 @@
 prefix foaf: <http://xmlns.com/foaf/0.1/>
-prefix ggdm: <https://vito.be/schema/ggdm#> 
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
-prefix owl:  <http://www.w3.org/2002/07/owl#> 
-prefix xsd:  <http://www.w3.org/2001/XMLSchema#> 
-prefix sur:  <https://w3id.org/survey-ontology#> 
-prefix prov: <http://www.w3.org/ns/prov#> 
+prefix ggdm: <https://vito.be/schema/ggdm#>
+prefix sur:  <https://w3id.org/survey-ontology#>
+prefix prov: <http://www.w3.org/ns/prov#>
 
-SELECT ?age ?fruits ?exercise ?heart
-WHERE { 
+SELECT ?age ?fruits ?exercise
+WHERE {
   ?completedQ2 sur:answeredIn ?_s ;
                sur:completesQuestion ggdm:question2 ;
                sur:hasAnswer ggdm:yes .
   ?_s prov:wasAssociatedWith ?person .
   OPTIONAL {
-    ?completedQ9_1 sur:completesQuestion ggdm:question9-1 ; 
+    ?completedQ9_1 sur:completesQuestion ggdm:question9-1 ;
                    sur:hasAnswer ?fruits .
   }
   OPTIONAL {
