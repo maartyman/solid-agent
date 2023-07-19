@@ -34,8 +34,9 @@ RUN mkdir /server
 WORKDIR /server
 ADD solid-aggregator-server ./solid-aggregator-server
 ADD incremunica ./incremunica
+ADD Comunica ./Comunica
 WORKDIR /server/solid-aggregator-server
-RUN npm install
-RUN npm run build
+#RUN npm install
+#RUN npm run build
 
 ENTRYPOINT ["npm", "run", "start", "serve"]

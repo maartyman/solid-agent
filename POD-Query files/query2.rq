@@ -1,5 +1,6 @@
 prefix sur:  <https://w3id.org/survey-ontology#>
 
+# How many GGDM questions are available?
 SELECT ( COUNT(DISTINCT ?completedQuestion) AS ?count )
 WHERE {
   ?completedQuestion sur:answeredIn ?session .

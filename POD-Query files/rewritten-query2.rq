@@ -1,6 +1,6 @@
 SELECT  (COUNT(DISTINCT ?completedQuestion) AS ?count)
 WHERE
-  {   { { SELECT  (if(bound(?fhirConditionOnsetDateTimeValue), <https://vito.be/schema/ggdm#yes>, <https://vito.be/schema/ggdm#no>) AS ?rvar33) (if(bound(?fhirConditionOnsetDateTimeValue), ?fhirConditionOnsetDateTimeValue, concat(str(day(now())), "-", str(month(now())), "-", str(year(now())))) AS ?rvar32)
+  {   { { SELECT  (if(bound(?fhirConditionOnsetDateTimeValue), <https://vito.be/schema/ggdm#yes>, <https://vito.be/schema/ggdm#no>) AS ?rvar27) (if(bound(?fhirConditionOnsetDateTimeValue), ?fhirConditionOnsetDateTimeValue, concat(str(day(now())), "-", str(month(now())), "-", str(year(now())))) AS ?rvar26)
           WHERE
             { OPTIONAL
                 { ?c    a                     <http://hl7.org/fhir/Condition> ;
@@ -20,21 +20,21 @@ WHERE
                 }
             }
         }
-        BIND(BNODE(concat("completed_question_2_on_", str(?rvar32))) AS ?completedQuestion)
-        BIND(BNODE(concat("session_on_", str(?rvar32))) AS ?session)
+        BIND(BNODE(concat("session_on_", str(?rvar26))) AS ?session)
+        BIND(BNODE(concat("completed_question_2_on_", str(?rvar26))) AS ?completedQuestion)
       }
     UNION
-      { { SELECT  ?rvar16 ?rvar12 ?rvar17 ?rvar15 ?rvar13 ?rvar14
+      { { SELECT  ?rvar40 ?rvar36 ?rvar41 ?rvar39 ?rvar37 ?rvar38
           WHERE
-            { ?rvar14  <http://www.w3.org/ns/prov#atTime>  ?rvar15 ;
-                       <http://www.w3.org/ns/prov#wasAssociatedWith>  ?rvar13 .
-              ?rvar12  <https://w3id.org/survey-ontology#answeredIn>  ?rvar14 ;
-                       <https://w3id.org/survey-ontology#hasAnswer>  ?rvar17 ;
-                       <https://w3id.org/survey-ontology#completesQuestion>  ?rvar16
-              FILTER ( ?rvar16 IN (<https://vito.be/schema/ggdm#question1>, <https://vito.be/schema/ggdm#question2>, <https://vito.be/schema/ggdm#question3>, <https://vito.be/schema/ggdm#question4>, <https://vito.be/schema/ggdm#question5>, <https://vito.be/schema/ggdm#question6>, <https://vito.be/schema/ggdm#question6-1>, <https://vito.be/schema/ggdm#question6-2>, <https://vito.be/schema/ggdm#question7>, <https://vito.be/schema/ggdm#question7-1>, <https://vito.be/schema/ggdm#question7-2>, <https://vito.be/schema/ggdm#question7-3>, <https://vito.be/schema/ggdm#question7-4>, <https://vito.be/schema/ggdm#question7-5>, <https://vito.be/schema/ggdm#question7-6>, <https://vito.be/schema/ggdm#question7-7>, <https://vito.be/schema/ggdm#question7-8>, <https://vito.be/schema/ggdm#question7-9>, <https://vito.be/schema/ggdm#question7-10>, <https://vito.be/schema/ggdm#question8-1>, <https://vito.be/schema/ggdm#question9-1>, <https://vito.be/schema/ggdm#question10>, <https://vito.be/schema/ggdm#question11>, <https://vito.be/schema/ggdm#question12>, <https://vito.be/schema/ggdm#question13>, <https://vito.be/schema/ggdm#question14>) )
+            { ?rvar38  <http://www.w3.org/ns/prov#atTime>  ?rvar39 ;
+                       <http://www.w3.org/ns/prov#wasAssociatedWith>  ?rvar37 .
+              ?rvar36  <https://w3id.org/survey-ontology#answeredIn>  ?rvar38 ;
+                       <https://w3id.org/survey-ontology#hasAnswer>  ?rvar41 ;
+                       <https://w3id.org/survey-ontology#completesQuestion>  ?rvar40
+              FILTER ( ?rvar40 IN (<https://vito.be/schema/ggdm#question1>, <https://vito.be/schema/ggdm#question2>, <https://vito.be/schema/ggdm#question3>, <https://vito.be/schema/ggdm#question4>, <https://vito.be/schema/ggdm#question5>, <https://vito.be/schema/ggdm#question6>, <https://vito.be/schema/ggdm#question6-1>, <https://vito.be/schema/ggdm#question6-2>, <https://vito.be/schema/ggdm#question7>, <https://vito.be/schema/ggdm#question7-1>, <https://vito.be/schema/ggdm#question7-2>, <https://vito.be/schema/ggdm#question7-3>, <https://vito.be/schema/ggdm#question7-4>, <https://vito.be/schema/ggdm#question7-5>, <https://vito.be/schema/ggdm#question7-6>, <https://vito.be/schema/ggdm#question7-7>, <https://vito.be/schema/ggdm#question7-8>, <https://vito.be/schema/ggdm#question7-9>, <https://vito.be/schema/ggdm#question7-10>, <https://vito.be/schema/ggdm#question8-1>, <https://vito.be/schema/ggdm#question9-1>, <https://vito.be/schema/ggdm#question10>, <https://vito.be/schema/ggdm#question11>, <https://vito.be/schema/ggdm#question12>, <https://vito.be/schema/ggdm#question13>, <https://vito.be/schema/ggdm#question14>) )
             }
         }
-        BIND(?rvar12 AS ?completedQuestion)
-        BIND(?rvar14 AS ?session)
+        BIND(?rvar38 AS ?session)
+        BIND(?rvar36 AS ?completedQuestion)
       }
   }

@@ -55,7 +55,7 @@ const query = () => {
         ),
         rules: rules.value
     }
-    fetch(`https://server-podquery-demo.vito.be`, {
+    fetch(`https://server-podquery-demo.vito.be/`, {
         method: "POST",
         body: JSON.stringify(queryExplanation),
         signal: signal
@@ -138,4 +138,10 @@ document.getElementById("ex3").addEventListener('click', () =>
         `https://server.solid-sandbox.vito.be/alice/profile/card
 `,
         schemaToFoafMappings)
+);
+
+document.getElementById("ex4").addEventListener('click', () =>
+    setPreset("",
+        "",
+        "")
 );
