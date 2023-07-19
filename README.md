@@ -4,7 +4,7 @@ This repository combines the solid-aggregator-server and the SRR rewriter to mak
 The solid-aggregator-server serves an endpoint to which clients can make query request. 
 The server will use the SRR query rewriter to rewrite the query to I) preserve the privacy of the pod's owner
 II) schema align the schema of the query to the schema used the POD. 
-The demo for this repo is run on https://pod-query-demo.vito.be/.
+The demo for this repo is run on https://podquery-demo.vito.be/.
 
 ![The POD-QUERY system](./Web%20Agent.png "Schematic overview of the POD-QUERY system")
 
@@ -17,17 +17,18 @@ The query results are then send back to the application.
 
 ## UI
 
-This is the UI that is run on https://pod-query-demo.vito.be/. 
-This frontend is build with webpack so to build the site locally you can start a dev-server with:
+This is the UI that is run on https://podquery-demo.vito.be/. 
+This frontend is build with webpack so to serve the site locally you can start a dev-server with: 
+(run the following commands in the UI directory)
 ```
 npm start
 ```
-Or build the website in a sub folder called `UI/dist/`:
+Or build a static website in a sub folder called `UI/dist/`:
 ```
 npm run build 
 ```
 This UI can be served with NGINX in a docker container.
-To build this docker container run the following command from inside the `UI/` folder:
+To build this docker container run the following command from inside the `UI/` directory:
 ```
 docker build .
 ```
